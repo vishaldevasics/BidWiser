@@ -1,10 +1,11 @@
-// import { catchAsyncErrors } from "../middlewares/catchAsyncErrors.js";
+import { catchAsyncErrors } from "../middlewares/catchAsyncErrors.js";
 import ErrorHandler from "../middlewares/error.js";
 import { User } from "../models/userSchema.js";
 import { v2 as cloudinary } from "cloudinary";
+import { generateToken } from "../utils/jwtToken.js";
 
 
-export const register = async(req, res,next) => {
+export const register = catchAsyncErrors(async(req, res,next) => {
   if (!req.files || Object.keys(req.files).length === 0) {
     return next(new ErrorHandler("Profile Image Required.", 400));
   }
@@ -92,9 +93,51 @@ export const register = async(req, res,next) => {
       },
     },
   });
-  // generateToken(user, "User Registered.", 201, res);
-  res.status(201).json({
+  generateToken(user, "User Registered.", 201, res);
+});
+
+export const login = catchAsyncErrors(async (req, res, next) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    return next(new ErrorHandler("Please fill full form."));
+  }
+  const user = await User.findOne({ email }).select("+password");
+  if (!user) {
+    return next(new ErrorHandler("Invalid credentials.", 400));
+  }
+  const isPasswordMatch = await user.comparePassword(password);
+  if (!isPasswordMatch) {
+    return next(new ErrorHandler("Invalid credentials.", 400));
+  }
+  generateToken(user, "Login successfully.", 200, res);
+});
+
+export const getProfile = catchAsyncErrors(async (req, res, next) => {
+  const user = req.user;
+  res.status(200).json({
     success: true,
-    message : "User registered successfully.",
-  })
-};
+    user,
+  });
+});
+
+export const logout = catchAsyncErrors(async (req, res, next) => {
+  res
+    .status(200)
+    .cookie("token", "", {
+      expires: new Date(Date.now()),
+      httpOnly: true,
+    })
+    .json({
+      success: true,
+      message: "Logout Successfully.",
+    });
+});
+
+export const fetchLeaderboard = catchAsyncErrors(async (req, res, next) => {
+  const users = await User.find({ moneySpent: { $gt: 0 } });
+  const leaderboard = users.sort((a, b) => b.moneySpent - a.moneySpent);
+  res.status(200).json({
+    success: true,
+    leaderboard,
+  });
+});
