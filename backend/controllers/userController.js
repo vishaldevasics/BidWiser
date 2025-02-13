@@ -3,6 +3,7 @@ import ErrorHandler from "../middlewares/error.js";
 import { User } from "../models/userSchema.js";
 import { v2 as cloudinary } from "cloudinary";
 import { generateToken } from "../utils/jwtToken.js";
+import { sendEmail } from "../utils/sendEmail.js";
 
 
 export const register = catchAsyncErrors(async(req, res,next) => {
@@ -93,6 +94,16 @@ export const register = catchAsyncErrors(async(req, res,next) => {
       },
     },
   });
+  // send email to user to verify account using otp
+  const otp = Math.floor(100000 + Math.random() * 900000);
+  await sendEmail({
+    email: user.email,
+    subject: "Account Verification",
+    message: `Your OTP is ${otp}`,
+  });
+
+  user.otp = otp;
+  await user.save();
   generateToken(user, "User Registered.", 201, res);
 });
 
@@ -139,5 +150,21 @@ export const fetchLeaderboard = catchAsyncErrors(async (req, res, next) => {
   res.status(200).json({
     success: true,
     leaderboard,
+  });
+});
+
+export const verifyAccount = catchAsyncErrors(async (req, res, next) => {
+  const { otp } = req.body;
+  
+  const user = req.user;
+  if (user.otp != otp) {
+    return next(new ErrorHandler("Invalid OTP.", 400));
+  }
+  user.isVerified = true;
+  user.otp = null;
+  await user.save();
+  res.status(200).json({
+    success: true,
+    message: "Account verified successfully.",
   });
 });
