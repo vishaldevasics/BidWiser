@@ -188,7 +188,7 @@ const SideDrawer = () => {
               to={"/"}
               className="font-semibold hover:text-[#d6482b] hover:transition-all hover:duration-150"
             >
-              CodeWithZeeshu
+              Jay Prakash & Vishal Devasi
             </Link>
           </p>
         </div>
