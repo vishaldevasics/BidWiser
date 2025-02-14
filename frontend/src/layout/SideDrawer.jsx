@@ -181,7 +181,7 @@ const SideDrawer = () => {
           >
             Contact Us
           </Link>
-          <p className="text-stone-500">&copy; PrimeBid, LLC.</p>
+          <p className="text-stone-500">&copy; BidWiser, LLC.</p>
           <p className="text-stone-500">
             Degined By{" "}
             <Link
