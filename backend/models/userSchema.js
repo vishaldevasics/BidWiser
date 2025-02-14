@@ -64,7 +64,7 @@ const userSchema = new mongoose.Schema({
   },
   isVerified: {
     type: Boolean,
-    default: false,
+    default: true, // later we will change it to false For testing purpose
   },
   createdAt: {
     type: Date,

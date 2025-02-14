@@ -95,15 +95,15 @@ export const register = catchAsyncErrors(async(req, res,next) => {
     },
   });
   // send email to user to verify account using otp
-  const otp = Math.floor(100000 + Math.random() * 900000);
-  await sendEmail({
-    email: user.email,
-    subject: "Account Verification",
-    message: `Your OTP is ${otp}`,
-  });
+  // const otp = Math.floor(100000 + Math.random() * 900000);
+  // await sendEmail({
+  //   email: user.email,
+  //   subject: "Account Verification",
+  //   message: `Your OTP is ${otp}`,
+  // });
 
-  user.otp = otp;
-  await user.save();
+  // user.otp = otp;
+  // await user.save();
   generateToken(user, "User Registered.", 201, res);
 });
 
