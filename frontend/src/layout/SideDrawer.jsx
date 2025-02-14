@@ -40,7 +40,7 @@ const SideDrawer = () => {
         <div className="relative">
           <Link to={"/"}>
             <h4 className="text-2xl font-semibold mb-4">
-              Prime<span className="text-[#D6482b]">Bid</span>
+              Bid<span className="text-[#D6482b]">Wiser</span>
             </h4>
           </Link>
           <ul className="flex flex-col gap-3">
