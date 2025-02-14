@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { register } from "@/store/slices/userSlice";
+import { toast } from "react-toastify";
 
 const SignUp = () => {
   const [userName, setUserName] = useState("");
@@ -23,11 +24,18 @@ const SignUp = () => {
   const navigateTo = useNavigate();
   const dispatch = useDispatch();
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
+    if (!userName) return toast.error("Username is required.");
+    if (!email) return toast.error("Email is required.");
+    if (!phone) return toast.error("Phone number is required.");
+    if (!password) return toast.error("Password is required.");
+    if (!address) return toast.error("Address is required.");
+    if (!role) return toast.error("Role is required.");
+    if (!profileImage) return toast.error("Profile image is required.");
     const formData = new FormData();
     formData.append("userName", userName);
-    formData.append("email", email);
+    formData.append("email", email.toLowerCase());
     formData.append("phone", phone);
     formData.append("password", password);
     formData.append("address", address);
@@ -40,6 +48,7 @@ const SignUp = () => {
       formData.append("razorpayAccountNumber", razorpayAccountNumber),
       formData.append("paypalEmail", paypalEmail));
     dispatch(register(formData));
+    
   };
 
   useEffect(() => {
@@ -226,6 +235,7 @@ const SignUp = () => {
               className="bg-[#d6482b] w-[420px] font-semibold hover:bg-[#b8381e] transition-all duration-300 text-xl py-2 px-4 rounded-md text-white mx-auto lg:w-[640px] my-4"
               type="submit"
               disabled={loading}
+              onClick={handleRegister}
             >
               {loading && "Registering..."}
               {!loading && "Register"}

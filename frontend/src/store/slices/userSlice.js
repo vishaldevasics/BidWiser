@@ -9,6 +9,7 @@ const userSlice = createSlice({
     isAuthenticated: false,
     user: {},
     leaderboard: [],
+    isVerified: false,
     error: null,
   },
   reducers: {
@@ -23,12 +24,44 @@ const userSlice = createSlice({
       state.user = action.payload.user;
     },
     registerFailed(state, action) {
+      state.loading = false;
+      state.isAuthenticated = false;
+      state.user = {};
+    },
+
+    loginRequest(state, action) {
       state.loading = true;
       state.isAuthenticated = false;
       state.user = {};
     },
+    loginSuccess(state, action) {
+      state.loading = false;
+      state.isAuthenticated = true;
+      state.user = action.payload.user;
+      state.isVerified = action.payload.user.isVerified;
+    },
+    loginFailed(state, action) {
+      state.loading = false;
+      state.isAuthenticated = false;
+      state.user = {};
+    },
+
+    verifyOtpRequest(state, action) {
+      state.loading = true;
+    },
+    verifyOtpSuccess(state, action) {
+      state.loading = false;
+      state.isVerified = true;
+      state.user = action.payload.user;
+    },
+    verifyOtpFailed(state, action) {
+      state.loading = false;
+      state.error = action.payload;
+    },
+
     logoutSuccess(state, action) {
       state.isAuthenticated = false;
+      state.isVerified = false;
       state.user = {};
       state.error = null;
     },
@@ -43,6 +76,7 @@ const userSlice = createSlice({
       state.isAuthenticated = state.isAuthenticated;
       state.leaderboard = state.leaderboard;
       state.loading = false;
+      state.error = null;
     },
   },
 });
@@ -65,6 +99,76 @@ export const register = (data) => async (dispatch) => {
     dispatch(userSlice.actions.clearAllErrors());
   } catch (error) {
     dispatch(userSlice.actions.registerFailed());
+    toast.error(error.response.data.message);
+    dispatch(userSlice.actions.clearAllErrors());
+  }
+};
+
+export const login = (data) => async (dispatch) => {
+  dispatch(userSlice.actions.loginRequest());
+  try {
+    const response = await axios.post(
+      "http://localhost:5000/api/v1/users/login",
+      data,
+      {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!response.data.user.isVerified) {
+      // If user is not verified, prompt for OTP
+      const otp = window.prompt("Your account is not verified. Please enter the OTP sent to your email:");
+      if (otp) {
+        await dispatch(verifyOtp({ email: data.email, otp }));
+        // After OTP verification, try logging in again
+        const loginResponse = await axios.post(
+          "http://localhost:5000/api/v1/users/login",
+          data,
+          {
+            withCredentials: true,
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        dispatch(userSlice.actions.loginSuccess(loginResponse.data));
+        toast.success(loginResponse.data.message);
+      } else {
+        toast.error("OTP is required to verify your account.");
+      }
+    } else {
+      dispatch(userSlice.actions.loginSuccess(response.data));
+      toast.success(response.data.message);
+    }
+    dispatch(userSlice.actions.clearAllErrors());
+  } catch (error) {
+    dispatch(userSlice.actions.loginFailed());
+    toast.error(error.response.data.message);
+    dispatch(userSlice.actions.clearAllErrors());
+  }
+};
+
+export const verifyOtp = (data) => async (dispatch) => {
+  dispatch(userSlice.actions.verifyOtpRequest());
+  try {
+    const response = await axios.post(
+      "http://localhost:5000/api/v1/users/verify",
+      data,
+      {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    dispatch(userSlice.actions.verifyOtpSuccess(response.data));
+    toast.success(response.data.message);
+    dispatch(userSlice.actions.clearAllErrors());
+  } catch (error) {
+    dispatch(userSlice.actions.verifyOtpFailed(error.response.data.message));
     toast.error(error.response.data.message);
     dispatch(userSlice.actions.clearAllErrors());
   }

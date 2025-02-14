@@ -153,6 +153,8 @@ export const fetchLeaderboard = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
+
+
 export const verifyAccount = catchAsyncErrors(async (req, res, next) => {
   const { otp } = req.body;
   
