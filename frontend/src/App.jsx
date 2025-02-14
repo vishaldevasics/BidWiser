@@ -6,6 +6,7 @@ import { ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import SignUp from './pages/SignUp';
 import Login from './pages/Login';
+import SubmitCommission from './pages/SubmitCommission';
 
 
 const App = () => {
@@ -16,6 +17,7 @@ const App = () => {
       <Route path='/' element={<Home/>} ></Route>
       <Route path='/sign-up' element={<SignUp/>}></Route>
       <Route path='/login' element={<Login/>}></Route>
+      <Route path='/submit-commission' element={<SubmitCommission/>}></Route>
     </Routes>
     <ToastContainer position='top-right'/>
    </Router>
