@@ -12,6 +12,8 @@ import { fetchUser } from './store/slices/userSlice';
 import HowItWorks from './pages/HowItWorks';
 import About from './pages/About';
 import { getAllAuctionItems } from './store/slices/auctionSlice';
+import { fetchLeaderboard } from './store/slices/userSlice';
+import LeaderboardPage from './pages/LeaderboardPage';
 
 
 const App = () => {
@@ -19,6 +21,7 @@ const App = () => {
   useEffect(() => {
     dispatch(fetchUser());
     dispatch(getAllAuctionItems());
+    dispatch(fetchLeaderboard());
   }, []);
   return (
    <Router>
@@ -30,6 +33,7 @@ const App = () => {
       <Route path='/submit-commission' element={<SubmitCommission/>}></Route>
       <Route path='/how-it-works-info' element={<HowItWorks/>}></Route>
       <Route path='/about' element={<About/>}></Route>
+      <Route path='/leaderboard' element={<LeaderboardPage/>}></Route>
     </Routes>
     <ToastContainer position='top-right'/>
    </Router>
