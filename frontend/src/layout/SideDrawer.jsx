@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { RiAuctionFill } from "react-icons/ri";
 import { MdLeaderboard, MdDashboard } from "react-icons/md";
 import { SiGooglesearchconsole } from "react-icons/si";
@@ -18,7 +18,6 @@ const SideDrawer = () => {
   const [show, setShow] = useState(false);
 
   const { isAuthenticated, user } = useSelector((state) => state.user);
-
   const dispatch = useDispatch();
   const handleLogout = () => {
     dispatch(logout());

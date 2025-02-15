@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const Leaderboard = () => {
   const { leaderboard } = useSelector((state) => state.user);
-  console.log(leaderboard);
+  // console.log(leaderboard);
   
   return (
     <>

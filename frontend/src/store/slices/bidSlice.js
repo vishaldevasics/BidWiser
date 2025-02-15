@@ -33,7 +33,7 @@ export const placeBid = (id, data) => async (dispatch) => {
     dispatch(getAuctionDetail(id))
   } catch (error) {
     dispatch(bidSlice.actions.bidFailed());
-    // console.log(error);
+    console.log(error);
     
     toast.error("Bid amount must be greater than the current bid.");
   }

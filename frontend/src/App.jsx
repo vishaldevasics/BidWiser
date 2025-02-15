@@ -16,6 +16,8 @@ import { fetchLeaderboard } from './store/slices/userSlice';
 import LeaderboardPage from './pages/LeaderboardPage';
 import Auctions from './pages/Auctions';
 import AuctionItem from './pages/AuctionItem';
+import CreateAuction from './pages/CreateAuction';
+import ViewMyAuction from './pages/ViewMyAuction';
 
 
 const App = () => {
@@ -38,6 +40,8 @@ const App = () => {
       <Route path='/leaderboard' element={<LeaderboardPage/>}></Route>
       <Route path='/auctions' element={<Auctions/>}></Route> 
       <Route path='/auction/item/:id' element={<AuctionItem/>}></Route> 
+      <Route path='/create-auction' element={<CreateAuction/>}></Route>
+      <Route path='/view-my-auctions' element = {<ViewMyAuction/>}></Route>
     </Routes>
     <ToastContainer position='top-right'/>
    </Router>
