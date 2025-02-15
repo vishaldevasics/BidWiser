@@ -54,7 +54,7 @@ const userSlice = createSlice({
     fetchUserSuccess(state, action) {
       state.loading = false;
       state.isAuthenticated = true;
-      state.user = action.payload.user;
+      state.user = action.payload;
       // state.isVerified = action.payload.user.isVerified;
     },
     fetchUserFailed(state, action) {

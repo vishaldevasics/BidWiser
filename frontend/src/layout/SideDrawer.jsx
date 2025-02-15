@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { RiAuctionFill } from "react-icons/ri";
 import { MdLeaderboard, MdDashboard } from "react-icons/md";
 import { SiGooglesearchconsole } from "react-icons/si";
@@ -14,10 +14,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout } from "@/store/slices/userSlice";
 import { Link } from "react-router-dom";
 
+
 const SideDrawer = () => {
   const [show, setShow] = useState(false);
 
   const { isAuthenticated, user } = useSelector((state) => state.user);
+  // console.log(user);
+  
   const dispatch = useDispatch();
   const handleLogout = () => {
     dispatch(logout());
@@ -39,7 +42,7 @@ const SideDrawer = () => {
         <div className="relative">
           <Link to={"/"}>
             <h4 className="text-2xl font-semibold mb-4">
-              Bid<span className="text-[#D6482b]">Wiser</span>
+              Prime<span className="text-[#D6482b]">Bid</span>
             </h4>
           </Link>
           <ul className="flex flex-col gap-3">
@@ -180,14 +183,14 @@ const SideDrawer = () => {
           >
             Contact Us
           </Link>
-          <p className="text-stone-500">&copy; BidWiser, LLC.</p>
+          <p className="text-stone-500">&copy; PrimeBid, LLC.</p>
           <p className="text-stone-500">
             Degined By{" "}
             <Link
               to={"/"}
               className="font-semibold hover:text-[#d6482b] hover:transition-all hover:duration-150"
             >
-              Jay Prakash & Vishal Devasi
+              CodeWithZeeshu
             </Link>
           </p>
         </div>
