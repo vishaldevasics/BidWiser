@@ -23,6 +23,19 @@ const auctionSlice = createSlice({
     getAllAuctionItemFailed(state,action){
       state.loading = false;
     },
+    getAuctionDetailRequest(state, action) {
+      state.loading = true;
+    },
+    getAuctionDetailSuccess(state, action) {
+      state.loading = false;
+      state.auctionDetail = action.payload.auctionItem;
+      state.auctionBidders = action.payload.bidders;
+    },
+    getAuctionDetailFailed(state, action) {
+      state.loading = false;
+      state.auctionDetail = state.auctionDetail;
+      state.auctionBidders = state.auctionBidders;
+    },
     resetSlice(state,action){
       state.loading=false;
       state.auctionDetail = state.auctionDetail;
@@ -47,6 +60,22 @@ export const getAllAuctionItems = () => async (dispatch) => {
   } catch (error) {
     dispatch(auctionSlice.actions.getAllAuctionItemFailed());
     console.error(error);
+  }
+};
+
+export const getAuctionDetail = (id) => async (dispatch) => {
+  dispatch(auctionSlice.actions.getAuctionDetailRequest());
+  try {
+    const response = await axios.get(
+      `http://localhost:5000/api/v1/auctionitem/auction/${id}`,
+      { withCredentials: true }
+    );
+    dispatch(auctionSlice.actions.getAuctionDetailSuccess(response.data));
+    dispatch(auctionSlice.actions.resetSlice());
+  } catch (error) {
+    dispatch(auctionSlice.actions.getAuctionDetailFailed());
+    console.error(error);
+    dispatch(auctionSlice.actions.resetSlice());
   }
 };
 
