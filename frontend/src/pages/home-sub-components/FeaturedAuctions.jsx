@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 
 const FeaturedAuctions = () => {
   const { allAuctions, loading } = useSelector((state) => state.auction);
-  console.log(allAuctions);
+  // console.log(allAuctions);
   
   return (
     <>

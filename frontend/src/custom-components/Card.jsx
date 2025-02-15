@@ -53,7 +53,7 @@ const Card = ({ imgSrc, title, startingBid, startTime, endTime, id }) => {
           <img
             src={imgSrc}
             alt={title}
-            className="w-full max-w-[200px] aspect-[4/3] object-cover rounded-md"
+            className="w-full  aspect-[4/3] object-cover rounded-md"
           />
         </div>
 
