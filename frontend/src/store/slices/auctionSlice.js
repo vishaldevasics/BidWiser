@@ -126,12 +126,16 @@ export const createAuction = (data) => async (dispatch) => {
 };
 
 export const getMyAuctionItems = () => async (dispatch) => {
+  // console.log("hello");
+  
   dispatch(auctionSlice.actions.getMyAuctionsRequest());
   try {
     const response = await axios.get(
       "http://localhost:5000/api/v1/auctionitem/myitems",
       { withCredentials: true }
     );
+    // console.log(response);
+    
     dispatch(auctionSlice.actions.getMyAuctionsSuccess(response.data.items));
     dispatch(auctionSlice.actions.resetSlice());
   } catch (error) {

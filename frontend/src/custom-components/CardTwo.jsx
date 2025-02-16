@@ -1,9 +1,113 @@
-import React from 'react'
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 
-const CardTwo = () => {
+const CardTwo = ({ imgSrc, title, startingBid, startTime, endTime, id }) => {
+  const calculateTimeLeft = () => {
+    const now = new Date();
+    const startDifference = new Date(startTime) - now;
+    const endDifference = new Date(endTime) - now;
+    let timeLeft = {};
+
+    if (startDifference > 0) {
+      timeLeft = {
+        type: "Starts In:",
+        days: Math.floor(startDifference / (1000 * 60 * 60 * 24)),
+        hours: Math.floor((startDifference / (1000 * 60 * 60)) % 24),
+        minutes: Math.floor((startDifference / 1000 / 60) % 60),
+        seconds: Math.floor((startDifference / 1000) % 60),
+      };
+    } else if (endDifference > 0) {
+      timeLeft = {
+        type: "Ends In:",
+        days: Math.floor(endDifference / (1000 * 60 * 60 * 24)),
+        hours: Math.floor((endDifference / (1000 * 60 * 60)) % 24),
+        minutes: Math.floor((endDifference / 1000 / 60) % 60),
+        seconds: Math.floor((endDifference / 1000) % 60),
+      };
+    }
+    return timeLeft;
+  };
+
+  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setTimeLeft(calculateTimeLeft());
+    }, 1000); // Update every second
+    return () => clearTimeout(timer);
+  }, [timeLeft]);
+
+  const formatTimeLeft = ({ days, hours, minutes, seconds }) => {
+    const pad = (num) => String(num).padStart(2, "0");
+    return `${days}:${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+  };
+
+  const dispatch = useDispatch();
+  const handleDeleteAuction = (id) => {};
+
+  const [openDrawer, setOpenDrawer] = useState(false);
+
   return (
-    <div>CardTwo</div>
-  )
-}
+    <>
+      <div className="flex flex-col bg-white rounded-sm group sm:basis-56 lg:basis-60 2xl:basis-80 overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 ">
+        {/* Image Section */}
+        <div className="w-full flex justify-center items-center p-4">
+          <img
+            src={imgSrc}
+            alt={title}
+            className="w-full  aspect-[4/3] object-cover rounded-md"
+          />
+        </div>
 
-export default CardTwo
+        {/* Info Section */}
+        <div className="px-4 pt-2 pb-4">
+          <h5 className="font-semibold text-lg group-hover:text-[#d6482b] mb-2">
+            {title}
+          </h5>
+          {startingBid && (
+            <p className="text-stone-600 font-light">
+              Starting Bid:{" "}
+              <span className="text-[#fdba88] font-bold ml-1">
+                {startingBid}
+              </span>
+            </p>
+          )}
+          <p className="text-stone-600 font-light">
+            {timeLeft.type}
+            {Object.keys(timeLeft).length > 1 ? (
+              <span className="text-[#fdba88] font-bold ml-1">
+                {formatTimeLeft(timeLeft)}
+              </span>
+            ) : (
+              <span className="text-[#fdba88] font-bold ml-1">Time's up!</span>
+            )}
+          </p>
+          <div className="flex flex-col gap-2 mt-4">
+            <Link
+              className="bg-stone-700 text-center text-white text-xl px-4 py-2 rounded-md transition-all duration-300 hover:bg-black"
+              to={`/auction/details/${id}`}
+            >
+              View Auction
+            </Link>
+            <button
+              onClick={handleDeleteAuction}
+              className="bg-red-400 text-center text-white text-xl px-4 py-2 rounded-md transition-all duration-300 hover:bg-red-600"
+            >
+              Delete Auction
+            </button>
+            <button
+              disabled={new Date(endTime) > Date.now()}
+              onClick={() => setOpenDrawer(true)}
+              className="bg-sky-400 text-center text-white text-xl px-4 py-2 rounded-md transition-all duration-300 hover:bg-sky-700"
+            >
+              Republish Auction
+            </button>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default CardTwo;

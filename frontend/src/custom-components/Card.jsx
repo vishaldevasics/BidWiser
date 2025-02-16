@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 const Card = ({ imgSrc, title, startingBid, startTime, endTime, id }) => {
   const calculateTimeLeft = () => {
@@ -10,7 +10,7 @@ const Card = ({ imgSrc, title, startingBid, startTime, endTime, id }) => {
 
     if (startDifference > 0) {
       timeLeft = {
-        type: 'Starts In:',
+        type: "Starts In:",
         days: Math.floor(startDifference / (1000 * 60 * 60 * 24)),
         hours: Math.floor((startDifference / (1000 * 60 * 60)) % 24),
         minutes: Math.floor((startDifference / 1000 / 60) % 60),
@@ -18,7 +18,7 @@ const Card = ({ imgSrc, title, startingBid, startTime, endTime, id }) => {
       };
     } else if (endDifference > 0) {
       timeLeft = {
-        type: 'Ends In:',
+        type: "Ends In:",
         days: Math.floor(endDifference / (1000 * 60 * 60 * 24)),
         hours: Math.floor((endDifference / (1000 * 60 * 60)) % 24),
         minutes: Math.floor((endDifference / 1000 / 60) % 60),
@@ -38,7 +38,7 @@ const Card = ({ imgSrc, title, startingBid, startTime, endTime, id }) => {
   }, [timeLeft]);
 
   const formatTimeLeft = ({ days, hours, minutes, seconds }) => {
-    const pad = (num) => String(num).padStart(2, '0');
+    const pad = (num) => String(num).padStart(2, "0");
     return `${days}:${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
   };
 
@@ -64,7 +64,7 @@ const Card = ({ imgSrc, title, startingBid, startTime, endTime, id }) => {
           </h5>
           {startingBid && (
             <p className="text-stone-600 font-light">
-              Starting Bid:{' '}
+              Starting Bid:{" "}
               <span className="text-[#fdba88] font-bold ml-1">
                 {startingBid}
               </span>
