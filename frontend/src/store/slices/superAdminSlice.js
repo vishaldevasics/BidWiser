@@ -1,7 +1,7 @@
 import axios from "axios";
 import { createSlice } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
-i;
+
 
 const superAdminSlice = createSlice({
   name: "superAdmin",
