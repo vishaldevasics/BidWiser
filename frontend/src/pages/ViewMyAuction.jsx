@@ -28,7 +28,7 @@ const ViewMyAuction = () => {
         <Spinner />
       ) : (
         <div className="flex flex-wrap gap-6">
-          {myAuctions.map((element) => {
+          { myAuctions.length > 0 ? (myAuctions.map((element) => {
             return (
               <CardTwo
                 title={element.title}
@@ -40,7 +40,7 @@ const ViewMyAuction = () => {
                 key={element._id}
               />
             );
-          })}
+          })):<h3 className="text-[#666] text-xl font-semibold mb-2 min-[480px]:text-xl md:text-2xl lg:text-3xl mt-5" >You have not posted any auctions</h3> }
         </div>
       )}
     </div>
