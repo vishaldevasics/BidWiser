@@ -162,6 +162,7 @@ export const deletePaymentProof = (id) => async (dispatch) => {
     );
     dispatch(superAdminSlice.actions.successForDeletePaymentProof());
     dispatch(getAllPaymentProofs());
+    dispatch(superAdminSlice.actions.clearAllErrors());
     toast.success(response.data.message);
   } catch (error) {
     dispatch(superAdminSlice.actions.failureForDeletePaymentProof());

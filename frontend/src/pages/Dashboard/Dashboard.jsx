@@ -1,21 +1,36 @@
-import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { clearAllSuperAdminSliceErrors, getAllPaymentProofs, getAllUsers, getMonthlyRevenue } from '../../store/slices/superAdminSlice'
-import AuctionItemDelete from './sub-components/AuctionItemDelete'
-import BiddersAuctioneersGraph from './sub-components/BiddersAuctioneersGraph'
-import PaymentGraph from './sub-components/PaymentGraph'
-import PaymentProofs from './sub-components/PaymentProofs'
-import Spinner from '@/custom-components/Spinner'
+import {
+  clearAllSuperAdminSliceErrors,
+  getAllPaymentProofs,
+  getAllUsers,
+  getMonthlyRevenue,
+} from "@/store/slices/superAdminSlice";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import AuctionItemDelete from "./sub-components/AuctionItemDelete";
+import BiddersAuctioneersGraph from "./sub-components/BiddersAuctioneersGraph";
+import PaymentGraph from "./sub-components/PaymentGraph";
+import PaymentProofs from "./sub-components/PaymentProofs";
+import Spinner from "@/custom-components/Spinner";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
-  const {loading} = useSelector((state) => state.superAdmin);
+  const { loading } = useSelector((state) => state.superAdmin);
   useEffect(() => {
     dispatch(getMonthlyRevenue());
     dispatch(getAllUsers());
     dispatch(getAllPaymentProofs());
     dispatch(clearAllSuperAdminSliceErrors());
-  })
+  }, []);
+
+  const { user, isAuthenticated } = useSelector((state) => state.user);
+  const navigateTo = useNavigate();
+  useEffect(() => {
+    if (user.role !== "Super Admin" || !isAuthenticated) {
+      navigateTo("/");
+    }
+  }, [isAuthenticated]);
+
   return (
     <>
       {loading ? (
@@ -61,4 +76,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard
+export default Dashboard;
