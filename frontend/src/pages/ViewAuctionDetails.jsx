@@ -1,9 +1,7 @@
 import Spinner from "@/custom-components/Spinner";
 import { getAuctionDetail } from "@/store/slices/auctionSlice";
-import { placeBid } from "@/store/slices/bidSlice";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { FaGreaterThan } from "react-icons/fa";
-import { RiAuctionFill } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
@@ -12,24 +10,16 @@ const viewAuctionDetails = () => {
   const { loading, auctionDetail, auctionBidders } = useSelector(
     (state) => state.auction
   );
-  const { isAuthenticated,user } = useSelector((state) => state.user);
+  const { isAuthenticated, user } = useSelector((state) => state.user);
 
   const navigateTo = useNavigate();
   const dispatch = useDispatch();
-
-  const [amount, setAmount] = useState(0);
-  const handleBid = () => {
-    const formData = new FormData();
-    formData.append("amount", amount);
-    dispatch(placeBid(id, formData));
-    dispatch(getAuctionDetail(id));
-  };
 
   useEffect(() => {
     if (!isAuthenticated || user.role !== "Auctioneer") {
       navigateTo("/");
     }
-    
+
     if (id) {
       dispatch(getAuctionDetail(id));
     }
@@ -46,10 +36,10 @@ const viewAuctionDetails = () => {
           </Link>
           <FaGreaterThan className="text-stone-400" />
           <Link
-            to={"/auctions"}
+            to={"/view-my-auctions"}
             className="font-semibold transition-all duration-300 hover:text-[#D6482B]"
           >
-            Auctions
+            My Auctions
           </Link>
           <FaGreaterThan className="text-stone-400" />
           <p className="text-stone-600">{auctionDetail.title}</p>
@@ -122,7 +112,9 @@ const viewAuctionDetails = () => {
                               {element.userName}
                             </p>
                           </div>
-                          <p className="flex-1 text-center">Rs.{element.amount}</p>
+                          <p className="flex-1 text-center">
+                            Rs.{element.amount}
+                          </p>
                           {index === 0 ? (
                             <p className="text-[20px] font-semibold text-green-600 flex-1  text-end">
                               1st
@@ -150,13 +142,17 @@ const viewAuctionDetails = () => {
                   )
                 ) : Date.now() < new Date(auctionDetail.startTime) ? (
                   <img
-                    src={"https://media.istockphoto.com/id/1674483798/vector/judge-gavel-wooden-lawyer-hammer-icon-in-flat-style-symbol-of-justice-judges-decision.jpg?s=612x612&w=0&k=20&c=B65TX8dVOj_FQpIo-EEt6Egfx-0cBPGINQqCq8eCHSU="}
+                    src={
+                      "https://media.istockphoto.com/id/1674483798/vector/judge-gavel-wooden-lawyer-hammer-icon-in-flat-style-symbol-of-justice-judges-decision.jpg?s=612x612&w=0&k=20&c=B65TX8dVOj_FQpIo-EEt6Egfx-0cBPGINQqCq8eCHSU="
+                    }
                     alt="not-started"
                     className="w-full max-h-[650px]"
                   />
                 ) : (
                   <img
-                    src={"https://th.bing.com/th/id/OIP.K1zx8Gg5yAnC4yEH0b6oywAAAA?rs=1&pid=ImgDetMain"}
+                    src={
+                      "https://th.bing.com/th/id/OIP.K1zx8Gg5yAnC4yEH0b6oywAAAA?rs=1&pid=ImgDetMain"
+                    }
                     alt="ended"
                     className="w-full max-h-[650px]"
                   />
